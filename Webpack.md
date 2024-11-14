@@ -43,6 +43,112 @@
 
 
 
+### devServer
+
+#### open
+
+* 告诉 dev-server 在服务器已经启动后打开浏览器。设置其为 `true` 以打开你的默认浏览器。
+
+  ```js
+  module.exports = {
+    //...
+    devServer: {
+      open: true,
+    },
+  };
+  ```
+
+#### port
+
+* 指定监听请求的端口号
+
+* 要想自动使用一个可用端口请使用 `port: 'auto'`
+
+  ```js
+  module.exports = {
+    //...
+    devServer: {
+      port: 8080,
+    },
+  };
+  ```
+
+#### proxy
+
+* 代理后端开发服务器
+
+  ```js
+  module.exports = {
+    //...
+    devServer: {
+      proxy: {
+        '/api': 'http://192.168.1.1:3000',
+      },
+    },
+  };
+  // 现在，对 /api/users 的请求会将请求代理到 http://192.168.1.1:3000/api/users
+  
+  // 如果不希望传递/api，则需要重写路径：
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        pathRewrite: { '^/api': '' },
+      },
+    },
+  },
+    
+  // 默认情况下，将不接受在 HTTPS 上运行且证书无效的后端服务器。 如果需要，可以这样修改配置
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'https://other-server.example.com',
+        secure: false,
+      },
+    },
+  },
+  ```
+
+* changeOrigin：它表示是否更新代理后请求的headers中host地址
+
+#### host
+
+- 指定要使用的 host。如果你想让你的服务器可以被外部访问
+
+  ```js
+  devServer: {
+    host: '0.0.0.0',
+  },
+  ```
+
+#### hot
+
+* 启用 webpack 的 [模块热替换](https://webpack.docschina.org/concepts/hot-module-replacement/) 特性：
+
+  ```js
+  devServer: {
+    hot: true,
+  },
+  ```
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
