@@ -1,6 +1,6 @@
 # Utils
 
-MAC地址/IP地址排序
+### MAC地址/IP地址排序
 
 ```js
 const columns = ref([
@@ -53,6 +53,22 @@ const compareMac = (mac1, mac2) => {
 ```
 
 
+
+### differ/clone
+
+```js
+import { transform, isEqual, isObject, cloneDeep } from 'lodash';
+
+export function differ(base, obj) {
+  return transform(base, function (result, value, key) {
+    if (!isEqual(value, obj[key])) {
+      result[key] = isObject(value) && isObject(obj[key]) ? differ(value, obj[key]) : value;
+    }
+  });
+}
+
+export const clone = cloneDeep;
+```
 
 
 
