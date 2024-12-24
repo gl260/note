@@ -1,6 +1,6 @@
 # Utils
 
-### MAC地址/IP地址排序
+### MAC 地址/IP 地址排序
 
 ```js
 const columns = ref([
@@ -20,7 +20,7 @@ const columns = ref([
         sorter: (a, b) => compareIp(a.local_ip, b.local_ip)
     }
 ])
- 
+
 // ip排序
 /**
  *
@@ -35,7 +35,7 @@ const compareIp = (ip1, ip2) => {
   }
   return ipToNumber(ip1) - ipToNumber(ip2)
 }
- 
+
 // mac排序
 /**
  *
@@ -51,8 +51,6 @@ const compareMac = (mac1, mac2) => {
   return macToNumber(mac1) - macToNumber(mac2)
 }
 ```
-
-
 
 ### differ/clone
 
@@ -70,71 +68,53 @@ export function differ(base, obj) {
 export const clone = cloneDeep;
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+### el-element 搜索高亮
+
+```html
+<el-form-item>
+  <el-autocomplete v-model="params.SearchName" :fetch-suggestions="querySearchName" placeholder="请输入" clearable @select="handleSelect">
+    <template slot-scope="{ item }">
+      <div v-html="item.value"></div>
+    </template>
+  </el-autocomplete>
+</el-form-item>
+```
+
+```js
+data() {
+  return {
+    alarmNameArr: [
+      { value: 'The board reset' },
+      { value: 'temperature is abnormal' },
+      { value: 'fan is abnormal' },
+      { value: 'The performance statistics value exceeds the warning threshold' },
+      { value: 'The Ethernet port loop detected' },
+    ]
+  }
+}
+methods: {
+  querySearchName(queryStr, cb) {
+    let results = queryStr ? this.nameFilter(queryStr) : this.alarmNameArr;
+
+    cb(results);
+  },
+  nameFilter(queryStr) {
+    // 高亮关键字
+    const highlightText = (text, query) => {
+      // $1用来 存储第一个用()括起来 匹配到的内容
+      const reg = new RegExp(`(${query})`, 'gi');
+      return text.replace(reg, `<span style="color: var(--primary);font-weight: 600;">$1</span>`);
+    };
+
+    return this.alarmNameArr
+      .filter(item => item.value?.toLowerCase().includes(queryStr.toLowerCase()))
+      .map(item => {
+        return {
+          ...item,
+          value: highlightText(item.value, queryStr),
+        };
+      });
+  },
+}
+
+```
