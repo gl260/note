@@ -52,6 +52,8 @@ const compareMac = (mac1, mac2) => {
 }
 ```
 
+
+
 ### differ/clone
 
 ```js
@@ -68,11 +70,19 @@ export function differ(base, obj) {
 export const clone = cloneDeep;
 ```
 
+
+
 ### el-element 搜索高亮
 
 ```html
 <el-form-item>
-  <el-autocomplete v-model="params.SearchName" :fetch-suggestions="querySearchName" placeholder="请输入" clearable @select="handleSelect">
+  <el-autocomplete
+    v-model="params.SearchName"
+    :fetch-suggestions="querySearchName"
+    placeholder="名称"
+    clearable
+    @select="handleSelect"
+  >
     <template slot-scope="{ item }">
       <div v-html="item.value"></div>
     </template>
@@ -93,6 +103,9 @@ data() {
   }
 }
 methods: {
+  handleSelect(v) {
+      this.params.SearchName = v.rawValue;
+  },
   querySearchName(queryStr, cb) {
     let results = queryStr ? this.nameFilter(queryStr) : this.alarmNameArr;
 
@@ -112,6 +125,7 @@ methods: {
         return {
           ...item,
           value: highlightText(item.value, queryStr),
+          rawValue: item.value, // 添加原始值
         };
       });
   },
