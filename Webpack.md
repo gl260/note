@@ -350,6 +350,19 @@ module.exports = {
 };
 ```
 
+```html
+<!-- 在public的index.html中添加 -->
+
+<!-- 使用 CDN 的 CSS 文件 -->
+<% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.css) { %>
+	<link href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" rel="stylesheet" />
+<% } %>
+<!-- 使用 CDN 的 JS 文件 -->
+<% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.js) { %>
+  <script src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"></script>
+<% } %>
+```
+
 #### MiniCssExtractPlugin
 
 * 会将 CSS 提取到单独的文件中，为每个包含 CSS 的 JS 文件创建一个 CSS 文件，并且支持 CSS 和 SourceMaps 的按需加载
