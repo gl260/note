@@ -18,8 +18,19 @@ module.exports = {
   chainWebpack(config){
     config.optimization.splitChunks({})
   },
-}
+} 
 ```
+
+Vue CLI中configureWebpack与chainWebpack的区别?
+
+* configureWebpack
+  * 该对象将会被 webpack-merge 合并入最终的 webpack 配置
+  * 当你需要简单地修改Webpack配置时，比如添加一些Loader或Plugin时,或者修改一些现有的配置项时,可以使用configureWebpack
+  * 通过configureWebpack直接修改 Webpack 配置时，只能覆盖现有的配置，而不能对其进行细粒度的修改
+* chainWebpack
+  * 需要对 Webpack 配置进行更复杂的修改时，比如根据环境不同应用不同的配置，或者需要更精细地控制 Webpack 的配置时，可以使用chainWebpack
+
+`configureWebpack` 与 `chainWebpack` 本质上没有什么区别,`configureWebpack`适用于简单的配置修改，而`chainWebpack`则更适用于复杂的修改
 
 
 
@@ -322,6 +333,7 @@ module.exports = {
   chainWebpack(config){
     config.plugin('html').tap(args => {
       if(isProd){
+        args[0].title = '修改标题',
         args[0].cdn = {
           css: [],
           js: [
@@ -359,10 +371,6 @@ module.exports = {
   },
 };
 ```
-
-
-
-
 
 
 
