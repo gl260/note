@@ -104,7 +104,7 @@ data() {
 }
 methods: {
   handleSelect(v) {
-      this.params.SearchName = v.rawValue;
+      this.params.SearchName = v.rawValue == undefined ? v.value : v.rawValue;
   },
   querySearchName(queryStr, cb) {
     let results = queryStr ? this.nameFilter(queryStr) : this.alarmNameArr;
