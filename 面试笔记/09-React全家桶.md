@@ -553,3 +553,80 @@ React是在视图层帮助我们解决了DOM的渲染过程，但是State依然�
 
 
 
+## 5.react项目创建流程
+
+* create-react-app
+
+  ```js
+  create-react-app 项目名称(不能包含大写字母)
+  ```
+
+  * 这种方式创建的react项目默认是webpack打包
+  * 需要安装craco(类似Vue外抛的vue.config.js), 在根目录下创建craco.config.js
+
+  ```js
+  npm install @craco/craco -D
+  ```
+  ```js
+  // craco.config.js
+  const path = require('path');
+  
+  module.exports = {
+    // webpack
+    webpack: {
+      alias: {
+        '@': path.resolve(__dirname, 'src')
+      }
+    }
+  };
+  ```
+
+  
+
+* vite
+
+  ```js
+  npm create vite@latest 项目名称
+  ```
+
+  * 按照提示选择“react”模板创建项目
+  * 这种方式创建的就是vite打包的
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
