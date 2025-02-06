@@ -594,7 +594,32 @@ React是在视图层帮助我们解决了DOM的渲染过程，但是State依然�
 
 
 
+## 6. react完全自动按需导入andt(待补充)
 
+```js
+npm install unplugin-auto-import -D
+
+// vite.config.js
+import AutoImport from 'unplugin-auto-import/vite';
+export default defineConfig({
+  plugins: [
+    AutoImport({
+      imports: [
+        {
+          antd: [
+            'Button',
+            'Input'
+            // 添加其他你需要的组件
+          ]
+        }
+      ],
+      dts: true // 生成类型声明文件
+    }),
+  ]
+});
+
+// 页面不会报错 但是vscode会提示Button is not defined
+```
 
 
 
