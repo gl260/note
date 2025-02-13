@@ -537,6 +537,226 @@ React是在视图层帮助我们解决了DOM的渲染过程，但是State依然�
 
 
 
+### 3.3 redux的使用
+
+基本使用
+
+```shell
+npm install @/reduxjs/toolkit react-redux
+```
+
+* 目录划分 (如果我们将所有的逻辑代码写到一起，那么当redux变得复杂时代码就难以维护)
+
+  * actionCreators.js
+  * constants.js
+  * index.js
+  * reducer.js
+
+  ```js
+  -store
+  --modules
+  ---功能名字
+  ----actionCreators.js
+  ----constants.js
+  ----index.js
+  ----reducer.js
+  --index.js // 出口文件
+  
+  --index.js // 出口文件
+  import { configureStore } from '@/reduxjs/toolkit';
+  import mainReducer from './modules/main';
+  import portReducer from './modules/port';
+  
+  const store = configureStore({
+    reducer: {
+      main: mainReducer,
+      port: portReducer
+    }
+  });
+  
+  export default store;
+  ```
+
+  ```js
+  // actionCreators.js --- 定义Action创建函数
+  import * as actionTypes from "./constants";
+  export const addCountAction = (add) => ({
+    type: actionTypes.ADD_COUNT,
+    add,
+  });
+  export const subCountAction = (sub) => ({
+    type: actionTypes.SUB_COUNT,
+    sub,
+  });
+  ```
+
+  ```js
+  // constants.js --- Action函数的type类型
+  export const ADD_COUNT = "add_count";
+  export const SUB_COUNT = "sub_count";
+  ```
+
+  ```js
+  // index.js --- reducer出口
+  import reducer from "./reducer";
+  export default reducer
+  ```
+
+  ```js
+  // reducer.js --- 创建一个 Reducer 来处理这些 Action
+  import * as actionTypes from "./constants";
+  const initialState = {
+    counter: 100,
+  }
+  function reducer(state = initialState, action) {
+    switch (action.type) {
+      case actionTypes.ADD_COUNT:
+        return { ...state, counter: state.counter + action.add };
+      case actionTypes.SUB_COUNT:
+        return { ...state, counter: state.counter - action.sub };
+      default:
+        return state;
+    }
+  }
+  export default reducer;
+  ```
+
+* **这种目录划分代码依旧非常的混乱, redux的编写逻辑过于的繁琐和麻烦**
+
+Redux Toolkit
+
+* Redux Toolkit 是官方推荐的编写 Redux 逻辑的方法 (有点类似Vuex)
+* 在很多地方为了称呼方便，也将之称为“RTK”
+
+```shell
+npm install @reduxjs/toolkit react-redux
+```
+
+* configureStore
+  * 包装createStore以提供简化的配置选项和良好的默认值
+* createSlice
+  * 接受reducer函数的对象、切片名称和初始状态值，并自动生成切片reducer，并带有相应的actions
+* createAsyncThunk
+  * 接受一个动作类型字符串和一个返回承诺的函数，并生成一个pending/fulfilled/rejected基于该承诺分派动作类型的 thunk
+
+```js
+// modules/main.js
+import { createSlice } from '@/reduxjs/toolkit';
+
+const mainSlice = createSlice({
+  name: 'main',
+  initialState: {
+    isHome: true,
+    isMenuActive: '0'
+  },
+  reducers: {
+    setIsHome(state, { payload }) {
+      state.isHome = payload;
+    },
+    setIsMenuActive(state, { payload }) {
+      state.isMenuActive = `${payload}`;
+    }
+  }
+});
+
+export const { setIsHome, setIsMenuActive } = mainSlice.actions;
+
+// 定义了一个selectors selectMapTopBar 来替代 Vuex 中的 getters
+
+export const selectMapTopBar = (state) => {
+  const { sidebar } = state.app;
+  return sidebar.map(({ children, ...other }) => other);
+};
+
+export default mainSlice.reducers;
+
+/**
+ * 使用selectMapTopBar
+ *  import React from 'react';
+    import { useSelector } from 'react-redux';
+    import { selectMapTopBar } from '@/store';
+
+    const Menus = () => {
+      const topBarItems = useSelector(selectMapTopBar);
+
+      return (
+        <div className="top-bar">
+          {topBarItems.map((item, index) => (
+            <div key={index} className="top-bar-item">
+              {item.name}
+            </div>
+          ))}
+        </div>
+      );
+    };
+
+  export default Menus;
+ */
+```
+
+```js
+// index.js
+import { configureStore } from '@/reduxjs/toolkit';
+import mainReducer from './modules/main';
+const store = configureStore({
+  reducer: {
+    main: mainReducer,
+  }
+});
+
+export default store;
+```
+
+* 使用
+
+  * `useSelector` 是一个 React-Redux 提供的钩子，用于从 Redux Store 中提取状态（state）
+
+  ```jsx
+  import { useSelector } from 'react-redux';
+  const Counter = () => {
+    const count = useSelector(state => state.counter); // 提取 counter 状态
+    return <div>{count}</div>;
+  };
+  ```
+
+  * `useDispatch` 是一个 React-Redux 提供的钩子，用于获取 `dispatch` 函数
+
+  ```jsx
+  import { useDispatch } from 'react-redux';
+  import { increment } from './actions';
+  const Button = () => {
+    const dispatch = useDispatch();
+    return <button onClick={() => dispatch(increment())}>Increment</button>;
+  };
+  ```
+
+  * `shallowEqual` 是一个 React-Redux 提供的工具函数，用于浅比较两个对象是否相等
+    * 在 `useSelector` 中，用于优化性能，避免不必要的重新渲染。
+    * 当 `useSelector` 返回的对象或数组发生变化时，`shallowEqual` 可以检查其属性或元素是否发生变化，而不是直接比较引用。
+
+```jsx
+import { setIsHome, setIsMenuActive } from '@/store/modules/main'
+import { shallowEqual, useDispatch, useSelector } from 'react-redux'
+
+const rr = memo(() => {
+  const {roomList, isLoading} = useSelector((state) => {
+    roomList: state.entire.roomList,
+    isLoading: state.entire.isLoading
+  },shallowEqual) // 使用 shallowEqual 避免不必要的重新渲染
+  const dispatch = useDispatch()
+  dispatch(setIsHome(传入的值))
+})
+export default rr
+```
+
+
+
+
+
+
+
+
+
 ## 4. React Router
 
 ### 4.1 什么是React Router?
