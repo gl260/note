@@ -563,6 +563,40 @@ JS的代码块在执⾏期间，会创建⼀个相应的作⽤域链，这个作
 
 
 
+### 1.20 state和props有什么区别?
+
+在React中, 一个组件的显示形态可以由数据状态`state`和外部参数`props`来决定
+
+* state
+
+  * 一般在 `constructor` 中初始化
+  * 要修改state, 需要通过调用`setState`来修改
+  * `setState`可以接受第二个参数, 它是一个函数, 会在`setState`调用完成并且组件开始重新渲染时被调用，可以用来监听渲染是否完成
+
+  ```js
+  this.setState({age: 18}, () => console.log('已修改年龄'))
+  ```
+
+* props
+
+  * `react` 具有单向数据流的特性，所以他的主要作用是从父组件向子组件中传递数据
+  * 在子组件中，`props` 在内部不可变的，如果想要改变它看，只能通过外部组件传入新的 `props` 来重新渲染子组件，否则子组件的 `props` 和展示形式不会改变
+
+* props
+
+* 相同点
+  * 两者都是 JavaScript 对象
+  * 两者都是用于保存信息
+  * props 和 state 都能触发渲染更新
+* 区别
+  * props 是外部传递给组件的，而 state 是在组件内被组件自己管理的，一般在 constructor 中初始化
+  * props 在组件内部是不可修改的，但 state 在组件内部可以进行修改
+  * state 是多变的、可以修改
+
+
+
+
+
 
 
 ## 2. React中编写CSS样式
@@ -880,10 +914,6 @@ const rr = memo(() => {
 })
 export default rr
 ```
-
-
-
-
 
 
 
