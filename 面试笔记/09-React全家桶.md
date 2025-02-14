@@ -195,6 +195,10 @@ react中需要我们显示的调用setState
 * 高阶组件是参数为组件，返回值为新组件的函数 -- 就是传入一个组件,对这个组件进行一些功能的增强,在返回出来新的组件
 * 注意: 首先 高阶组件 本身不是一个组件，而是一个函数 其次，这个函数的参数是一个组件，返回值也是一个组件
 
+高阶组件的这种实现方式，本质上是一个装饰者设计模式
+
+* 在不改变原有功能的情况下 添加新的功能
+
 
 
 
@@ -592,6 +596,82 @@ JS的代码块在执⾏期间，会创建⼀个相应的作⽤域链，这个作
   * props 是外部传递给组件的，而 state 是在组件内被组件自己管理的，一般在 constructor 中初始化
   * props 在组件内部是不可修改的，但 state 在组件内部可以进行修改
   * state 是多变的、可以修改
+
+
+
+### 1.21 super()和super(props)有什么区别?
+
+* 在ES6中通过`extends` 关键字实现类的继承, 子类中需要通过super关键字调用父类
+
+* 如果在子类中不使用 `super`，关键字，则会引发报错
+
+  * 报错的原因是 子类是没有自己的 `this` 对象的，它只能继承父类的 `this` 对象
+  * 如果先调用 `this`，再初始化 `super()`，同样是禁止的行为
+
+* 在 `React` 中，类组件是基于 `ES6` 的规范实现的，继承 `React.Component`
+
+* 因此用到 `constructor` 就必须写 `super()` 才初始化 `this`
+
+* 注意 无论有没有 `constructor`，在 `render` 中 `this.props` 都是可以使用的，这是 `React` 自动附带的
+
+* 但是也不建议使用 `super()` 代替 `super(props)`
+
+  * 因为在 `React` 会在类组件构造函数生成实例后再给 `this.props` 赋值，所以在不传递 `props` 在 `super` 的情况下，调用 `this.props` 为 `undefined`
+
+  ```js
+  class cpn extends React.Component {
+    constructor(props) {
+      super(); // 没传入 props
+      console.log(props);      //  {}
+      console.log(this.props); //  undefined
+      // ...
+    }
+  }
+  ```
+
+  * 而传入 `props` 的则都能正常访问，确保了 `this.props` 在构造函数执行完毕之前已被赋值，更符合逻辑
+
+  ```js
+  class cpn extends React.Component {
+    constructor(props) {
+      super(props); // 传入 props
+      console.log(props);      //  {}
+      console.log(this.props); //  {}
+      // ...
+    }
+  }
+  ```
+
+* 总结
+  * 在调用 `super` 过程，无论是否传入 `props`，`React` 内部都会将 `porps` 赋值给组件实例 `porps` 属性中
+  * 如果只调用了 `super()`，那么 `this.props` 在 `super()` 和构造函数结束之间仍是 `undefined`
+
+
+
+### 1.22 说说对React Hooks的理解? 解决了什么问题?
+
+* `Hook` 是 React 16.8 的新增特性。它可以让你在不编写 `class` 的情况下使用 `state` 以及其他的 `React` 特性
+* 什么引入`hook`，官方给出的动机是解决长时间使用和维护`react`过程中常遇到的问题，例如：
+  * 难以重用和共享组件中的与状态相关的逻辑
+  * 类组件中的this增加学习成本，类组件在基于现有工具的优化上存在些许问题
+  * 由于业务变动，函数组件不得不改为类组件等等
+* 在以前，函数组件也被称为无状态的组件，只负责渲染的一些工作
+* 因此，现在的函数组件也可以是有状态的组件，内部也可以维护自身的状态以及做一些逻辑方面的处理
+* useState / useEffect / useCallback / useRef / ...
+
+解决了什么?
+
+* 编写`hooks`为函数式编程，每个功能都包裹在函数中，整体风格更清爽，更优雅
+* `hooks`的出现，使函数组件的功能得到了扩充，拥有了类组件相似的功能
+* `hooks`能够解决大多数问题，并且还拥有代码复用机制，因此优先考虑`hooks`
+
+
+
+
+
+
+
+
 
 
 
