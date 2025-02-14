@@ -297,6 +297,21 @@ JS的代码块在执⾏期间，会创建⼀个相应的作⽤域链，这个作
   * 编写形式: 函数组件使用函数定义 类组件使用类定义
   * 状态管理: 函数组件使用useState和其他Hooks管理状态, 类组件使用this.state和this.setState
   * 生命周期: 函数组件使用useEffect模拟生命周期方法, 类组件直接使用生命周期方法
+
+  ```js
+  // 对应类组件中的componentDidMount生命周期
+  useEffect(() => {
+      console.log("Hello");
+  }, []);
+  // 如果在useEffect回调函数中return一个函数，则return函数会在组件卸载的时候执行，正如componentWillUnmount
+  useEffect(() => {
+      console.log("Hello");
+    	return () => {
+         console.log("Bye");
+      };
+  }, []);
+  ```
+
   * 调用方式: 函数组件直接调用函数, 类组件需要实例化后调用render方法
 
   ```js
