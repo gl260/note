@@ -72,6 +72,7 @@ react中需要我们显示的调用setState
 
 ### 1.3 什么是jsx?
 
+* JSX 是J avaScript XML 的简写
 * JSX是⼀种JavaScript的语法扩展
 * 它用于描述我们的UI界面，并且可以和JavaScript融合在一起使用
 * 它不同于Vue中的模块语法，我们不需要专门学习模板语法中的一些指令（比如v-for、v-if、v-else、v-bind）
@@ -92,6 +93,14 @@ react中需要我们显示的调用setState
 
 
 ### 1.5 为什么React选择了JSX
+
+* JSX 的是 Javascript 的语法糖
+  * JSX 主要用于声明 React 元素，但 React 并不强制使用 JSX，即使用了 JSX 语法，最终在编译的过程中也会被 Babel 编译成 React.createElement, 所以JSX 更像 React.createElement 的语法糖
+  * React 团队并不想引入 Javascript 之外的体系，而是希望通过合理的关注点分离来保持组件开发的纯粹性。
+* 方案对比
+  * 模版 -- React 团队认为模版不应该成为开发中的关注点，因为引入模版语法，模版指令等是一种不佳的方案
+  * 模版字符串 -- 模版字符串的结构会造成多次的内部嵌套，使代码的结构变的复杂和更加的难以维护
+  * 所以 React 最终选择的JSX，因为其跟 React的思想更加的贴合，不需要引入更多的概念
 
 
 
@@ -144,7 +153,31 @@ react中需要我们显示的调用setState
 
 ### 1.9 React事件和普通的HTML事件有什么不同?
 
-* 
+回答思路：**命名方式-->语法-->阻止浏览器默认行为-->优点-->执行顺序**
+
+* **命名方式**：原生事件全为小写，react事件为小驼峰
+
+* **事件函数处理语法**：原生为字符串，react为函数
+
+  ```jsx
+  // 原生HTML
+    <button onclick="handleClick()">Click Me</button>
+  // React
+  	handleClick() {}
+    render() {
+      return <button onClick={this.handleClick}>Click Me</button>;
+    }
+  ```
+
+* **阻止浏览器的默认行为**：react不能用return false来阻止，而必须调用event.preventDefault()来阻止。
+
+* **相比HTML事件React事件的优点**：
+
+  * 兼容所有浏览器，更好的跨平台
+  * 将事件同意存放在一个事件池（数组），减少了内存消耗，避免频繁的增删
+  * 便于react统一管理，提高了事件机制的执行效率
+
+* **执行顺序**：原先先，合成事件后，需避免原生事件与合成事件混用，若原生事件[阻止冒泡](https://so.csdn.net/so/search?q=阻止冒泡&spm=1001.2101.3001.7020)会导致合成事件无法执行
 
 
 
