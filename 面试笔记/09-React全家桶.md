@@ -248,7 +248,21 @@ export class App extends PureComponent {
 export default App
 ```
 
+* 函数式组件
 
+```jsx
+import React, { useRef, useEffect } from 'react';
+
+const cpn = () => {
+  const myRef = useRef(null); // 创建一个 ref
+  useEffect(() => {
+    console.log(myRef.current); // 输出对应的 DOM 元素
+  }, []);
+  return <div ref={myRef}>Hello, World!</div>; // 将 ref 赋给 DOM 元素
+}
+
+export default cpn
+```
 
 
 
