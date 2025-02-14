@@ -355,6 +355,38 @@ JS的代码块在执⾏期间，会创建⼀个相应的作⽤域链，这个作
 
 
 
+生命周期主要分成三个阶段 (react16.4后)
+
+**创建阶段 / 更新阶段 / 卸载阶段**
+
+* 创建阶段
+  * **constructor**
+    * 实例过程中自动调用的方法
+  * getDerivedStateFromProps
+    * 新增的生命周期方法，是一个静态的方法，因此不能访问到组件的实例
+    * 在每次`render`方法前调用，第一个参数为即将更新的`props`，第二个参数为上一个状态的`state`，可以比较`props` 和 `state`来加一些限制条件，防止无用的state更新
+  * **render**
+    * 类组件必须实现的方法，用于渲染`DOM`结构，可以访问组件`state`与`prop`属性
+    * 注意： 不要在 `render` 里面 `setState`, 否则会触发死循环导致内存崩溃
+  * **componentDidMount**
+    * 组件挂载到真实`DOM`节点后执行，其在`render`方法之后执行
+* 更新阶段
+  * getDerivedStateFromProps
+  * shouldComponentUpdate
+    * 执行时机：到新的props或者state时都会调用，通过返回true或者false告知组件更新与否
+    * 一般情况，不建议在该周期方法中进行深层比较，会影响效率
+    * 同时也不能调用`setState`，否则会导致无限循环调用更新
+  * **render**
+  * getSnapshotBeforeUpdate
+    * 该周期函数在`render`后执行，执行之时`DOM`元素还没有被更新
+  * **componentDidUpdate**
+    * 执行时机：组件更新结束后触发
+* 卸载阶段
+  * **componentWillUnmount**
+    * 组件卸载前，清理一些注册是监听事件，或者取消订阅的网络请求等
+
+
+
 ### 1.16 React的setState是同步的还是异步的？React18中是怎么样的？
 
 * 在 React 中，可变状态通常保存在组件的 state 属性中，并且只能通过使用 setState()来更新
