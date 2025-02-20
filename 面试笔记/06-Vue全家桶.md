@@ -1555,6 +1555,88 @@ methods: {
 
 
 
+### 6.19 Vue项目本地开发完后部署到服务器后报404是什么原因?
+
+前端打包后上传到服务器, 让web跑起来, 以nginx为例
+
+```js
+server {
+  listen  80;
+  server_name  www.xxx.com;
+
+  location / {
+    index  /data/dist/index.html;
+  }
+}
+```
+
+```js
+// 检查配置是否正确
+nginx -t 
+
+// 平滑重启
+nginx -s reload
+```
+
+* 场景还原
+
+  * `vue`项目在本地时运行正常，但部署到服务器中，刷新页面，出现了404错误
+  * HTTP 404 错误意味着链接指向的资源不存在
+
+* 为什么history模式下有问题?
+
+  * `Vue`是属于单页应用
+  * SPA页面, 所有用户交互是通过动态重写当前页面, 不管我们应用有多少页面，构建物都只会产出一个`index.html`
+  * 可以根据 `nginx` 配置得出，当我们在地址栏输入 `www.xxx.com` 时，这时会打开我们 `dist` 目录下的 `index.html` 文件，然后我们在跳转路由进入到 `www.xxx.com/login`
+  * 当我们在 `xxx.com/login` 页执行刷新操作，`nginx location` 是没有相关配置的，所以就会出现 404 的情况
+
+* 为什么hash模式下没有问题?
+
+  * `hash` 模式我们都知道是用符号#表示的，如 `xxx.com/#/login`, `hash` 的值为 `#/login`
+  * 它的特点在于：`hash` 虽然出现在 `URL` 中，但不会被包括在 `HTTP` 请求中，对服务端完全没有影响，因此改变 `hash` 不会重新加载页面
+  * `hash` 模式下，仅 `hash` 符号之前的内容会被包含在请求中，如 `website.com/#/login` 只有 `website.com` 会被包含在请求中 ，因此对于服务端来说，即使没有配置`location`，也不会返回404错误
+
+* 解决方案
+
+  * 产生问题的本质是因为我们的路由是通过JS来执行视图切换的
+  * 当我们进入到子路由时刷新页面，`web`容器没有相对应的页面此时会出现404
+  * 所以我们只需要配置将任意页面都重定向到 `index.html`，把路由交由前端处理
+
+  ```js
+  server {
+    listen  80;
+    server_name  www.xxx.com;
+  
+    location / {
+      index  /data/dist/index.html;
+      try_files $uri $uri/ /index.html;
+    }
+  }
+  ```
+
+  * 修改完配置文件后记得配置的更新
+
+  ```js
+  nginx -s reload
+  ```
+
+  * 为了避免这种情况，你应该在 `Vue` 应用里面覆盖所有的路由情况，然后在给出一个 404 页面
+
+  ```js
+  const router = new VueRouter({
+    mode: 'history',
+    routes: [
+      { path: '*', component: NotFoundComponent }
+    ]
+  })
+  ```
+
+  
+
+
+
+
+
 
 
 ## 7. axios网络请求库
