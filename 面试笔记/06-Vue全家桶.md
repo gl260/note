@@ -22,7 +22,7 @@ Vue 是⼀套⽤于构建⽤户界⾯的渐进式 JavaScript框架
 
 并提供了一套声明式的、组件化的编程模型，帮助你高效地开发用户界面
 
-Vue核心特性
+**Vue核心特性**
 
 * 数据驱动用的是MVVM
   * 但是官网也有说到 没有完全遵循MVVM模型 但是Vue的设计也受到了它的启发
@@ -34,8 +34,14 @@ Vue核心特性
   * 任何的应用都会被抽象成一颗组件树
 * 有自己的指令系统
   * 带有 v- 前缀的特殊属性作用
-* vue中的template 语法是固定的，只有 v-if、v-for 等等语法，也就是说，template 遇见条件渲染就是要固定的选择用 v-if 相对于react中的jsx想实现条件渲染可以用 if else，也可以用三元表达式，还可以用任意合法的 JavaScript 语法
-* vue的核心是什么?
+* 模板语法
+  * vue中的template 语法是固定的，只有 v-if、v-for 等等语法，也就是说，template 遇见条件渲染就是要固定的选择用 v-if 相对于react中的jsx想实现条件渲染可以用 if else，也可以用三元表达式，还可以用任意合法的 JavaScript 语法
+* 单位件组件  Single-File Components --> **SFC**
+  * 我们可以使用一种类似 HTML 格式的文件来书写 Vue 组件，它被称为**单文件组件** 也被称为 `.vue` 文件
+  * 顾名思义，Vue 的单文件组件会将一个组件的逻辑 (JavaScript)，模板 (HTML) 和样式 (CSS) 封装在同一个文件里
+* 生命周期钩子
+* 状态管理 Vuex
+* 路由管理 Vue Router
 
 
 
@@ -50,7 +56,7 @@ Vue核心特性
 * 官方有说到 - 虽然没有完全遵循 MVVM 模型，但是 Vue 的设计也受到了它的启发
 * 结论: 将ui结构和业务逻辑分开，通过ViewModel在ui结构和业务逻辑之间进行通信
 * 用MVVM开发页面的优势:
-  * 低耦合：想html css js 基本不在一起写
+  * 低耦合：像html css js 基本不在一起写
   * 可重用性高
   * 双向数据绑定的模式，实现了View和Model的自动同步，因此开发者只需要专注对数据的维护操作即可，而不需要一直操作 dom。
 
@@ -96,7 +102,6 @@ Vue核心特性
   * 前后端职责清晰,前端进⾏交互逻辑，后端负责数据处理
 * 缺点
   * 首次加载耗时多: 所以按需加载就显得尤为重要
-  * 由于单⻚应⽤在⼀个⻚⾯中显示所有的内容，不能使⽤浏览器的前进后退功能
   * SEO 难度较⼤：由于所有的内容都在⼀个⻚⾯中动态替换显示，所以在 SEO 上其有着天然的弱势。
 
 
@@ -119,10 +124,10 @@ Vue核心特性
 
 * Vue 能够侦听响应式数组的变更方法，并在它们被调用时触发相关的更新。这些变更方法包括：
 * 会修改原来数组的方法,就会触发视图更新 (7种)
-  * shift()
-  * pop()
+  * shift() --- 移除数组的第一项
+  * pop() --- 删除数组的最后一位
   * push()
-  * unshift()
+  * unshift() ---（在开头)向数组添加一个元素
   * splice() ----截取数组
   * sort() ----排序数组
   * reverse() ----反转数组
@@ -137,9 +142,9 @@ Vue核心特性
   * 用在虚拟DOM算法上
   * key属性主要是为了**更高效的更新虚拟DOM**，用于dom diff算法，在比较新旧节点列表时用于识别 vnode
     * vue使用的虚拟dom，不直接操作dom元素，在操作虚拟dom的时候又使用了diff算法。diff算法的实现基于两个假设： 两个相同的组件产生类似的DOM结构，不同的组件产生不同的DOM结构。
-  * 没有 key 时，Vue 会使用一种最小化元素移动的算法，并尽可能地就地复用相同类型的元素。
-  * 有key时，根据 key 的变化顺序来重新排列元素，并且将始终移除 key 已经不存在的元素。
-* key 是VNode的唯⼀标记，通过这个key，diff 操作可以更准确、更快速的达到复⽤节点，更新视图的目的。
+  * 没有 key 时，VVue 会默认使用“就地复用”策略，可能导致错误的 DOM 更新。
+  * 有key时，如果列表顺序变化，Vue 会通过 key 识别元素是否需要移动，而不是重新渲染整个列表。
+* key 的主要作用是帮助 Vue 高效、准确地更新列表，确保元素和组件状态的正确性。
 
 ##### 为什么key不要用index
 
@@ -496,8 +501,8 @@ $data: this.$data() --> 获取data中的数据
 ##### 补充: this在哪些生命周期中可以被访问到?
 
 * 好像除了beforeCreate都是可以访问到的
-* destroye -- 完全销毁一个实例 并不能清除DOM，仅仅销毁实例
-* destroye 到底可不可以访问this? -- 测试了可以通过this去访问data中的数据
+* destroy -- 完全销毁一个实例 并不能清除DOM，仅仅销毁实例
+* destroy 到底可不可以访问this? -- 测试了可以通过this去访问data中的数据
 
 
 
@@ -1490,6 +1495,63 @@ Vue.js 3.0放弃了Object.defineProperty API，⽽使⽤了更快的Proxy API。
 
 * table
 * form
+
+
+
+### 6.18 Vue中给对象添加新属性时界面不会刷新?
+
+```js
+data() {
+  obj: {
+    oldProperty:"旧属性"
+  }
+}
+methods: {
+  feat() {
+    this.obj.newProperty = "新属性" // 为obj添加新属性
+    console.log(this.obj)
+  },
+},
+```
+
+* 点击按钮，发现结果不及预期，数据虽然更新了（`console`打印出了新属性），但页面并没有更新
+
+* 原理
+
+  * `vue2`是用过`Object.defineProperty`实现数据响应式
+
+  ```js
+  const obj = {}
+  Object.defineProperty(obj, 'foo', {
+          get() {
+              console.log(`get foo:${val}`);
+              return val
+          },
+          set(newVal) {
+              if (newVal !== val) {
+                  console.log(`set foo:${newVal}`);
+                  val = newVal
+              }
+          }
+      })
+  }
+  ```
+  * 当我们访问`foo`属性或者设置`foo`值的时候都能够触发`setter`与`getter`
+  * 但是我们为`obj`添加新属性的时候，却无法触发事件属性的拦截
+  * 原因是一开始`obj`的`foo`属性被设成了响应式数据，而`bar`是后面新增的属性，并没有通过`Object.defineProperty`设置成响应式数据
+
+* 解决方案
+
+  * Vue.set()
+    * Vue.set()的源码, 调用了一个`defineReactive`方法，实现新增属性的响应式
+    * `defineReactive`方法，内部还是通过`Object.defineProperty`实现属性拦截
+  * Object.assign()
+    * 直接使用`Object.assign()`添加到对象的新属性不会触发更新
+    * 应创建一个新的对象，合并原对象和混入对象的属性
+  * $forceUpdate
+    * 实在不知道怎么操作时，可采取`$forceUpdate()`进行强制刷新 (不建议)
+
+**PS: `vue3`是用过`proxy`实现数据响应式的，直接动态添加新属性仍可以实现数据响应式**
 
 
 
