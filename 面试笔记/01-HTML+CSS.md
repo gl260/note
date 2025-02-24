@@ -77,10 +77,10 @@
 ```html
 <meta 
   name="viewport" 
-  content="width=devicewidth,
+  content="width=device-width,
   userscalable=no,
-  initialscale=1.0,
-  maximumscale=1.0,
+  initial-scale=1.0,
+  maximum-scale=1.0,
   minimum-scale=1.0"
 >
 ```
@@ -744,6 +744,7 @@ Transform形变
 * JS动画
   * 好弥补了css缺点，控制能力很强
   * 可以单帧的控制、变换，同时写得好完全可以兼容 IE6，并且功能强大
+  * 使用 `requestAnimationFrame` 代替 `setTimeout` 或 `setInterval`
 * 总结
   * 对于⼀些复杂控制的动画，使用 javascript 会比较好。而在实现⼀些小的交互动效的时候，可以多考虑 CSS 
 
@@ -1000,31 +1001,51 @@ display: -webkit-box;
 
 ## 36. CSS3新增了那些特性？HTML5新增了那些特性?
 
-* 一，选择器
+CSS3
+
+* 选择器
 
   * :nth-child(n)
   * :nth-of-type(n)
   * ...
-
-* 二，新样式
+* 新样式
 
   * border-radius：创建圆角边框
-
-  * box-shadow：为元素添加阴影
+* box-shadow / text-shadow ：为 元素 / 文本 添加阴影
   * border-image：使用图片来绘制边框
-  * 新增了新的颜色表示方式`rgba`与`hsla`
-  * `text-shadow`可向文本应用阴影
-  * ...
+  * 新增了新的颜色表示方式 rgba 与 hsla
+  * linear-gradient 渐变
+  * background-image 支持设置多个背景图片
+  * border-image 使用图片作为边框
+* transition 过度
+* transform 形变
+* animation 动画
+* 弹性盒子布局Flexbox / 网格布局Grid
+* 媒体查询
 
-* 三，transition过度
+HTML5
 
-* 四，transform转换
-
-* 五，animation动画
-
-* 六，渐变
-
-  * linear-gradient
+* 语义化标签
+  * `<header>`：页眉。
+  * `<footer>`：页脚。
+  * `<nav>`：导航栏。
+  * `<article>`：独立的内容区域。
+  * `<section>`：文档中的节。
+  * `<aside>`：侧边栏。
+  * `<main>`：主要内容区域。
+  * `<mark>`：高亮文本。
+  * `<time>`：时间或日期。
+  * `<figure>` 和 `<figcaption>`：图片和图片标题。
+* 多媒体支持
+  * `<audio>`：嵌入音频。
+  * `<video>`：嵌入视频。
+* Canvas / SVG
+* 本地存储: localStorage / sessionStorage
+* 通信 API
+  - WebSocket：实现全双工通信。
+  - WebRTC：支持实时音视频通信。
+* 地理定位: Geolocation API：获取用户的地理位置。
+* 拖放 API: Drag and Drop：支持元素的拖放操作。
 
 
 
