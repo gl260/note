@@ -1,4 +1,8 @@
-## 1. HTML标签有哪些行内元素
+
+
+## 1. 基础
+
+### 1.1 HTML标签有哪些行内元素
 
 * i
 * a
@@ -8,6 +12,161 @@
 * label
 * select
 * textarea
+
+
+
+### 1.2 img 的 title 和 alt 有什么区别?
+
+* title: 鼠标滑动到元素上的时候显示
+* alt: 是 <img> 的特有属性，用于图片无法加载显示、读屏器阅读图片
+  * 可提图片高可访问性，除了纯装饰图片外都必须设置有意义的值，搜索引擎会重点分析
+
+
+
+### 1.3 什么事 HTML 空元素, 有哪些?
+
+* **空元素**（void element）是 HTML 中的一类特殊元素，它们不能包含任何子节点（例如内嵌的元素或文本节点）。这些元素只有开始标签，没有结束标签
+
+  ```html
+  <br>
+  <img>
+  <input>
+  <link>
+  <meta>
+  ```
+
+
+
+### 1.4 src 与 href 的区别?
+
+* src
+
+  * 指向外部资源的位置，通常用于嵌入内容
+
+  * <script>, <img>, <iframe>, <audio>, <video>
+
+  * 
+
+* href
+
+  * 用于指定超链接或外部资源的路径，通常用于建立链接关系
+  * <a>, <link>
+
+* 主要区别
+
+  * `src` 用于嵌入资源，`href` 用于建立链接
+  * `src` 引用的资源通常会在页面加载时立即加载，而 `href` 引用的资源通常在用户交互（如点击链接）时加载
+  * `src` 用于 `<script>`, `<img>` 等标签，`href` 用于 `<a>`, `<link>` 等标签
+
+
+
+### 1.5 HTML 全局属性有那些
+
+* class :为元素设置类标识
+* id : 元素 id ，文档内唯一
+* style : 行内 css 样式
+* title : 元素相关的建议信息
+* lang : 元素内容的的语言
+* data-* : 为元素增加自定义属性
+* draggable : 设置元素是否可拖拽
+
+
+
+### 1.6 viewport 详解
+
+```html
+<meta 
+  name="viewport" 
+  content="width=devicewidth,
+  userscalable=no,
+  initialscale=1.0,
+  maximumscale=1.0,
+  minimum-scale=1.0"
+>
+```
+
+* width 设置 viewport 宽度，为一个正整数，或字符串‘device-width’
+  * device-width 设备宽度
+*  height 设置 viewport 高度，一般设置了宽度，会自动解析出高度，可以不用设置
+* initial-scale 默认缩放比例（初始缩放比例），为一个数字，可以带小数
+* minimum-scale 允许用户最小缩放比例，为一个数字，可以带小数
+* maximum-scale 允许用户最大缩放比例，为一个数字，可以带小数
+
+怎样处理移动端 1px 被渲染成 2px 问题?
+
+* mate 标签中的 viewport 属性， initial-scale 设置为 1rem 按照设计稿标准走，外加利用transfrome 的 scale(0.5) 缩小一倍即可
+* mate 标签中的 viewport 属性， initial-scale 设置为 0.5,rem 按照设计稿标准走即可
+
+
+
+### 1.7 meta 相关 
+
+```html
+<DOCTYPE html> <!--H5 标准声明，使用 HTML5 doctype，不区分大小写-->
+<head lang=”en”> <!--标准的 lang 属性写法-->
+<meta charset=’utf-8ʹ><!--声明文档使用的字符编码-->
+<meta name=”description” content=”不超过 150 个字符”/><!--页面描述-->
+<meta name=”keywords” content=””/><!-- 页面关键词-->
+<meta name=”author” content=”name, email@gmail.com”/><!--网页作者-->
+<meta name=”robots” content=”index,follow”/><!--搜索引擎抓取-->
+<meta name=”apple-mobile-web-app-title” content=”标题”><!--iOS 设备 begin-->
+<meta name=”apple-mobile-web-app-capable” content=”yes”/><!--添加到主屏后的标题（i 是否启用 WebApp 全屏模式，删除苹果默认的工具栏和菜单栏-->m
+<meta name=”renderer” content=”webkit”> <!-- 启用 360 浏览器的极速模式(webkit)-->
+<meta name=”x5-orientation” content=”portrait”> <!--QQ 强制竖屏-->
+       
+<!--设置页面不缓存--> 
+<meta http-equiv=”pragma” content=”no-cache”>
+<meta http-equiv=”cache-control” content=”no-cache”>
+<meta http-equiv=”expires” content=”0″>
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -192,6 +351,10 @@ SEO通过了解搜索引擎的运行规则来调整网站，以提高网站的�
 
   - 0 是完全透明
   - 影响该元素的所有后代元素(会占用空间)
+
+- filter:blur(0)
+
+  - 将一个元素的模糊度设置为 0
 
 - 绝对定位于当前页面的不可见位置
 
@@ -1140,9 +1303,17 @@ img{
 
 
 
+## 44. 页面导入样式时，使用link和@import有什么区别？
 
-
-
+* 加载顺序
+  * 浏览器会**并行加载** `<link>` 引入的 CSS 文件，不会阻塞页面渲染。
+  * `@import`引入的样式需要等页面加载完后再加载, 就是**串行加载**
+* 兼容性
+  * `<link>` 兼容所有浏览器
+  * `@import`不兼容ie5以下
+* 预处理器支持
+  * `<link>` 标签与 CSS 预处理器无关，仅用于 HTML 文件。
+  * `@import`在 CSS 预处理器（如 Sass、Less）中广泛使用
 
 
 
