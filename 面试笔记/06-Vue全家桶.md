@@ -1107,12 +1107,12 @@ router返回 router 实例,是一个全局路由,可以用来操作路由,项目
   * **跨平台与分层设计(主要原因)：**虚拟 DOM 最大的优势在于抽象了原本的渲染过程，实现了跨平台的能力，而不仅仅局限于浏览器的 DOM，可以是安卓和 IOS 的原生组件，可以是小程序。`React` 到 `Vue` ，虚拟 `DOM` 为这两个框架都带来了跨平台的能力`React-Native` 和 `Weex`
   * 操作真实DOM是很慢的,哪怕一个最简单的`div`也包含着很多属性,操作`DOM`的代价仍旧是昂贵的，频繁操作还是会出现页面卡顿，影响用户的体验
   * **将真实节点抽象成VNode,有效减少直接操作DOM的次数,从而提高性能**
+  * 虚拟 DOM 可以将多次状态变化合并为一次更新，减少直接操作 DOM 的次数
   * **Virtual DOM 的优势不在于单次的操作，而是在大量、频繁的数据更新下，能够对视图进行合理、高效的更新**。为了实现⾼效的 DOM 操作， ⼀套⾼效的虚拟 DOM diff 算法显得很有必要
 * 缺点
-  * ⽆法进⾏极致优化： 虽然虚拟 DOM + 合理的优化，⾜以应对绝⼤部分应⽤的性能需求，但在⼀些性能要求极⾼的应⽤中虚拟 DOM ⽆法进⾏针对性的极致优化。
-  * 虽然 Vue 能够保证触发更新的组件最小化，但在单个组件内部依然需要遍历该组件的整个Virtual DOM树
-  * 在⼀些组件整个模版内只有少量动态节点的情况下，这些遍历都是性能的浪费
-  * 传统 Virtual DOM 的性能跟模版大小正相关，跟动态节点的数量⽆关
+  * **内存占用**：虚拟 DOM 需要在内存中维护一棵树，可能会占用较多的内存。
+  * **性能开销**：Diff 算法和虚拟 DOM 的创建和对比会带来一定的性能开销。
+  * **不适合简单场景**：对于简单的应用或静态页面，虚拟 DOM 可能会带来不必要的复杂性。
 
 **虚拟DOM的核心就是diff算法**
 
@@ -1513,7 +1513,7 @@ Vue.js 3.0放弃了Object.defineProperty API，⽽使⽤了更快的Proxy API。
 - **异步执行**：回调函数在浏览器空闲时执行，不会阻塞主线程。
     - **高效检测**：浏览器内部优化了交叉状态的计算，性能更高。
     - **简单易用**：只需配置观察器和回调函数即可。
-  
+    
   ```js
   const observer = new IntersectionObserver((entries, observer) => {
     entries.forEach(entry => {
@@ -1908,11 +1908,10 @@ axios.interceptors.response.use(
 * 打包优化
 
   * Tree-shaking：webpack、rollup 等中的概念。是一种通过清除多余代码方式来优化项目打包体积的技术
-
-  * 主要依赖于 import 和 export 语句，用来检测代码模块是否被导出、导入，且被 JavaScript 文件使用。
-
+* 主要依赖于 import 和 export 语句，用来检测代码模块是否被导出、导入，且被 JavaScript 文件使用。
   *  Vue2：以 nextTick 为例子，全局API暴露在Vue实例上，即使未使用，也无法通过 tree-shaking 进行消除。
-  * Vue3：中针对全局和内部的API进行了重构，并考虑到 tree-shaking 的支持
+* Vue3：中针对全局和内部的API进行了重构，并考虑到 tree-shaking 的支持
+  * Vue 3 的核心库体积比 Vue 2 小约 40%。
 
 - TypeScript支持
 
@@ -1929,10 +1928,23 @@ axios.interceptors.response.use(
     - 没有beforeCreate 和 created，因为setup 是围绕这两个生命周期钩子运行的
   - vue3异步组件可以通过 defineAsyncComponent 方法来创建
 
-  - 组件现在支持有多个根节点
+  - Vue3组件现在支持有多个根节点 -- （Fragment）
 
-  * 组件上 v-model 用法已更改
-  * 在同一元素上使用的 v-if 和 v-for 优先级已更改
+  * Vue 3 提供了 `<teleport>` 组件，可以将子组件渲染到 DOM 中的任意位置。
+
+    ```html
+    <teleport to="body">
+      <div class="modal">这是一个模态框</div>
+    </teleport>
+    ```
+
+  - 组件上 v-model 用法已更改 -- Vue 3 支持多个 `v-model` 绑定
+
+    ```js
+    <my-component v-model:title="title" v-model:content="content" />
+    ```
+
+  - 在同一元素上使用的 v-if 和 v-for 优先级已更改
 
 - 其他
 
