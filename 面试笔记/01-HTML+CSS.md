@@ -43,14 +43,16 @@
 
   * 指向外部资源的位置，通常用于嵌入内容
 
-  * <script>, <img>, <iframe>, <audio>, <video>
-
-  * 
+    ```js
+  <script>, <img>, <iframe>, <audio>, <video>
+    ```
 
 * href
 
   * 用于指定超链接或外部资源的路径，通常用于建立链接关系
-  * <a>, <link>
+    ```js
+    <a>, <link>
+    ```
 
 * 主要区别
 
