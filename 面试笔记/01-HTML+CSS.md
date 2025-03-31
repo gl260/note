@@ -23,7 +23,7 @@
 
 
 
-### 1.3 什么事 HTML 空元素, 有哪些?
+### 1.3 什么是 HTML 空元素, 有哪些?
 
 * **空元素**（void element）是 HTML 中的一类特殊元素，它们不能包含任何子节点（例如内嵌的元素或文本节点）。这些元素只有开始标签，没有结束标签
 
@@ -44,11 +44,9 @@
   * 指向外部资源的位置，通常用于嵌入内容
 
     ```js
-    
+    <script>, <img>, <iframe>, <audio>, <video>
     ```
-  <script>, <img>, <iframe>, <audio>, <video>
-    ```
-
+  
 * href
 
   * 用于指定超链接或外部资源的路径，通常用于建立链接关系
@@ -123,54 +121,6 @@
 <meta http-equiv=”cache-control” content=”no-cache”>
 <meta http-equiv=”expires” content=”0″>
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -793,7 +743,7 @@ Transform形变
 
 ## 28. 说说你对BFC的理解
 
-* B**FC就是用来决定块级盒子是如何排布的**
+* **BFC就是用来决定块级盒子是如何排布的**
 
 * 要知道BFC首先要知道FC的概念 : formatting context 格式化上下文 ,页面上所有的内容都是格式化上下文的一部分
 * BFC :  block formatting context  块级格式化上下文
@@ -1015,7 +965,7 @@ CSS3
 * 新样式
 
   * border-radius：创建圆角边框
-* box-shadow / text-shadow ：为 元素 / 文本 添加阴影
+  * box-shadow / text-shadow ：为 元素 / 文本 添加阴影
   * border-image：使用图片来绘制边框
   * 新增了新的颜色表示方式 rgba 与 hsla
   * linear-gradient 渐变
@@ -1292,10 +1242,10 @@ Chrome 中文版浏览器会默认设定页面的最小字号是12px，英文版
 	position: absolute;
 	left: 0;
 	top: 0;
-    height:200%;
-    width:200%;
+  height:200%;
+  width:200%;
 	border: 1px solid red;
-    transform: scale(0.5);
+  transform: scale(0.5);
 	transform-origin: 0 0;
 }
 ```
